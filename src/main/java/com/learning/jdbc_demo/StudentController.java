@@ -1,9 +1,9 @@
 package com.learning.jdbc_demo;
 
-import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,47 +11,43 @@ import java.util.Optional;
 @RestController
 public class StudentController {
 
-    private final StudentRepository studentRepository;
+    // 1. We now inject the StudentService
+    private final StudentService studentService;
 
-    public StudentController(StudentRepository studentRepository){
-        this.studentRepository = studentRepository;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
+    // 2. All methods now call the service layer
     @GetMapping("/students")
-    public List<Student> getAllStudents(){
-        return studentRepository.findAll();
+    public List<Student> getAllStudents() {
+        return studentService.findAllStudents();
     }
 
     @PostMapping("/students")
-    public  ResponseEntity<String> createStudent(@RequestBody Student student) {
-
-        studentRepository.save(student);
-        return new ResponseEntity<>("Student created successfuly", HttpStatus.CREATED);
-    }
-
-    // In StudentController.java
-    @PutMapping("/students/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable int id, @RequestBody Student student) {
-        student.setId(id);
-        studentRepository.save(student); // Use save() for updates
-        return new ResponseEntity<>("Student updated successfully", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/students/{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable int id) {
-        studentRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        Student savedStudent = studentService.saveStudent(student);
+        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
     @GetMapping("/students/search")
     public ResponseEntity<Student> getStudentByEmail(@RequestParam String email) {
-        // Call our new custom finder method
-        Optional<Student> studentOptional = studentRepository.findByEmail(email);
-
-        // Check if a student was found and return the appropriate response
+        Optional<Student> studentOptional = studentService.findStudentByEmail(email);
         return studentOptional
                 .map(student -> new ResponseEntity<>(student, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-}
 
+    @PutMapping("/students/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student studentDetails) {
+        studentDetails.setId(id);
+        Student updatedStudent = studentService.updateStudent(studentDetails);
+        return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable int id) {
+        studentService.deleteStudent(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}
