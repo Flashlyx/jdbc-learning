@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class StudentController {
 
@@ -25,7 +27,7 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) { // Add @Valid
         Student savedStudent = studentService.saveStudent(student);
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
@@ -39,7 +41,7 @@ public class StudentController {
     }
 
     @PutMapping("/students/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student studentDetails) {
+    public ResponseEntity<Student> updateStudent(@PathVariable int id, @Valid @RequestBody Student studentDetails) { // Add @Valid
         studentDetails.setId(id);
         Student updatedStudent = studentService.updateStudent(studentDetails);
         return new ResponseEntity<>(updatedStudent, HttpStatus.OK);

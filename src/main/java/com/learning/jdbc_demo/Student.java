@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jdk.jfr.Enabled;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Student {
@@ -13,7 +14,11 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "Student name cannot be blank.") // 1. Cannot be null or just whitespace
     private String name;
+
+    @NotBlank(message = "Email cannot be blank.")
+    @Email(message = "Please provide a valid email address.")
     private String email;
 
     public Student() {}
