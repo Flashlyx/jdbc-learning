@@ -1,11 +1,11 @@
 package com.learning.jdbc_demo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -20,6 +20,24 @@ public class Student {
     @NotBlank(message = "Email cannot be blank.")
     @Email(message = "Please provide a valid email address.")
     private String email;
+
+    @ManyToMany
+    // In Student.java
+    @JoinTable(
+            name = "student_courses",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private Set<Course> courses = new HashSet<>();
+
+    public Set<Course> getCourses(){
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses){
+        this.courses = courses;
+    }
+
+
 
     public Student() {}
     public Student(Integer id, String name, String email) {
@@ -58,5 +76,6 @@ public class Student {
                 ", email='" + email + '\'' +
                 '}';
     }
+
 
 }
