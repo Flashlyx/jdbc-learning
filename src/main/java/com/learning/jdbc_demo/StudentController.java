@@ -52,4 +52,10 @@ public class StudentController {
         studentService.deleteStudent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/students/{studentId}/courses/{courseId}")
+    public ResponseEntity<Student> enrollStudentInCourse(@PathVariable int studentId, @PathVariable int courseId) {
+        Student updatedStudent = studentService.enrollStudentInCourse(studentId, courseId);
+        return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
+    }
 }

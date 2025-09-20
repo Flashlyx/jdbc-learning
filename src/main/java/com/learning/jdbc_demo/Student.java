@@ -21,12 +21,12 @@ public class Student {
     @Email(message = "Please provide a valid email address.")
     private String email;
 
-    @ManyToMany
-    // In Student.java
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "student_courses",
             joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id"))
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
     private Set<Course> courses = new HashSet<>();
 
     public Set<Course> getCourses(){

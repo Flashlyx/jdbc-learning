@@ -1,5 +1,6 @@
 package com.learning.jdbc_demo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -32,6 +33,7 @@ public class Course {
         this.name = name;
     }
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "courses")
     private Set<Student> students = new HashSet<>();
 
