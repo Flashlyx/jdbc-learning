@@ -1,4 +1,4 @@
-package com.learning.jdbc_demo.Controller.DTO;
+package com.learning.jdbc_demo.DTO;
 
 public class EmployeeDTO {
 
@@ -24,9 +24,6 @@ public class EmployeeDTO {
 
     @Override
     public String toString() {
-        return "EmployeeDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "EmployeeDTO{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
 }
